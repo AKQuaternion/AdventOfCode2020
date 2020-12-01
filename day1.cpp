@@ -1,5 +1,3 @@
-#include "Intcode.hpp"
-
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
