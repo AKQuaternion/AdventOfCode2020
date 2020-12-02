@@ -36,10 +36,8 @@ return {-1,-1,-1};
 }
 
 void day1() {
-   auto star1 = 0;
-   auto star2 = 0;
    ifstream ifile("../day1.txt");
-   int i;
+   int i=-1;
    vector<int> numbers;
    while (ifile >> i)
       numbers.push_back(i);
@@ -47,10 +45,7 @@ void day1() {
    sort(numbers.begin(), numbers.end());
 
    auto [x1,x2] = find2Summands(numbers,2020);
-   star1 = x1 * x2;
+   cout << "Day 1 star 1 = " << x1 * x2 << "\n";
    auto [y1,y2,y3] = find3Summands(numbers,2020);
-   star2 = y1 * y2 * y3;
-
-   cout << "Day 1 star 1 = " << star1 << "\n";
-   cout << "Day 1 star 2 = " << star2 << "\n";
+   cout << "Day 1 star 2 = " << y1 * y2 * y3 << "\n";
 }
