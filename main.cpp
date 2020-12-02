@@ -63,8 +63,8 @@ double timesec() {
 int main() {
   double time1 = timesec(); // End time (sec)
 
-      day1();
-  //    day2();
+//      day1();
+      day2();
   //    day3();
   //    day4();
   //    day5();
