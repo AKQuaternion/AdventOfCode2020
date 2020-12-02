@@ -63,8 +63,8 @@ double timesec() {
 int main() {
   double time1 = timesec(); // End time (sec)
 
-//      day1();
-      day2();
+      day1();
+//      day2();
   //    day3();
   //    day4();
   //    day5();
@@ -92,51 +92,7 @@ int main() {
   double elapsedtime = time2 - time1; // Elapsed (sec)
   std::cout << "Time required: " << elapsedtime << " seconds" << std::endl;
 }
-// Day 1 star 1 =
-// Day 1 star 2 =
-// Day 2 star 1 =
-// Day 2 star 2 =
-// Day 3 star 1 =
-// Day 3 star 2 =
-// Day 4 star 1 =
-// Day 4 star 2 =
-// Day 5 star 1 =
-// Day 5 star 2 =
-// Day 6 star 1 =
-// Day 6 star 2 =
-// Day 7 star 1 =
-// Day 7 star 2 =
-// Day 8 star 1 =
-// Day 8 star 2 =
-// Day 9 star 1 =
-// Day 9 star 2 =
-// Day 10 star 1 =
-// Day 10 star 2 =
-// Day 11 star 1 =
-// Day 11 star 2 =
-// Day 12 star 1 =
-// Day 12 star 2 =
-// Day 13 star 1 =
-// Day 13 star 2 =
-// Day 14 star 1 =
-// Day 14 star 2 =
-// Day 15 star 1 =
-// Day 15 star 2 =
-// Day 16 star 1 =
-// Day 16 star 2 =
-// Day 17 star 1 =
-// Day 17 star 2 =
-// Day 18 star 1 =
-// Day 18 star 2 =
-// Day 19 star 1 =
-// Day 19 star 2 =
-// Day 20 star 1 =
-// Day 20 star 2 =
-// Day 21 star 1 =
-// Day 21 star 2 =
-// Day 22 star 1 =
-// Day 22 star 2 =
-// Day 23 star 1 =
-// Day 23 star 2 =
-// Day 24 star 1 =
-// Day 24 star 2 =
+//Day 1 star 1 = 910539
+//Day 1 star 2 = 116724144
+//Day 2 star 1 = 398
+//Day 2 star 2 = 562

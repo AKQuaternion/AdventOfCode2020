@@ -1,71 +1,53 @@
 #include <algorithm>
-#include <cmath>
-#include <cstdlib>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
-#include <iterator>
-#include <map>
-#include <memory>
-#include <numeric>
-#include <queue>
-#include <set>
-#include <sstream>
-#include <string>
-#include <tuple>
 #include <utility>
 #include <vector>
-using std::abs;
-using std::ceil;
 using std::cout;
-using std::endl;
-using std::forward_as_tuple;
 using std::ifstream;
 using std::istream;
 using std::istringstream;
-using std::map;
-using std::max;
-using std::max_element;
-using std::min;
 using std::pair;
-using std::queue;
-using std::set;
-using std::sqrt;
 using std::string;
-using std::swap;
-using std::tie;
-using std::tuple;
 using std::vector;
+
+pair<int, int> findSummands(const vector<int> &numbers, int desiredSum) {
+   auto low = numbers.begin();
+   auto high = numbers.end() - 1;
+   while (low <= high) {
+      auto currentSum = *low + *high;
+      if (currentSum == desiredSum)
+         return {*low, *high};
+      if (currentSum > desiredSum)
+         --high;
+      else
+         ++low;
+   }
+   return {-1, -1};
+}
 
 void day1() {
    auto star1 = 0;
    auto star2 = 0;
    ifstream ifile("../day1.txt");
-   int _i;
+   int i;
    vector<int> numbers;
-   while (ifile >> _i) {
-      numbers.push_back(_i);
+   while (ifile >> i) {
+      numbers.push_back(i);
    }
 
-   sort(numbers.begin(),numbers.end());
-   auto low = 0;
-   auto high = numbers.size()-1;
-   while(true) {
-      auto val = numbers[low]+numbers[high];
-      if (val==2020) {
-         star1 = numbers[low]*numbers[high];
+   sort(numbers.begin(), numbers.end());
+
+   auto [x1,x2] = findSummands(numbers,2020);
+   star1 = x1 * x2;
+   for(auto n : numbers) {
+      auto [x1,x2] = findSummands(numbers,2020-n);
+      if( x1 >= 0) {
+         star2 = x1 * x2 * n;
          break;
       }
-      else if (val < 2020)
-         ++low;
-      else
-         --high;
    }
-   for(unsigned long i=0;i<numbers.size();++i)
-      for(unsigned long j=i+1;j<numbers.size();++j)
-         for(unsigned long k=j+1;k<numbers.size();++k)
-            if(numbers[i]+numbers[j]+numbers[k]==2020)
-               cout << numbers[i]*numbers[j]*numbers[k];
-            cout << "Day 1 star 1 = " << star1 << "\n";
+
+   cout << "Day 1 star 1 = " << star1 << "\n";
    cout << "Day 1 star 2 = " << star2 << "\n";
 }
