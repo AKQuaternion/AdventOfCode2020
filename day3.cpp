@@ -25,7 +25,8 @@ void day3() {
    ifstream ifile("../day3.txt");
    string line;
    vector<string> treeMap;
-   while (getline(ifile, line)) treeMap.push_back(line);
+   while (getline(ifile, line))
+      treeMap.push_back(line);
 
    auto star1 = countTrees(treeMap, 3, 1);
 
@@ -36,11 +37,3 @@ void day3() {
    cout << "Day 3 star 1 = " << star1 << "\n";
    cout << "Day 3 star 2 = " << star2 << "\n";
 }
-
-/*
- * Right 1, down 1.
-Right 3, down 1. (This is the slope you already checked.)
-Right 5, down 1.
-Right 7, down 1.
-Right 1, down 2.
- */

@@ -55,44 +55,49 @@ void day25();
 
 
 double timesec() {
-  auto nanos = static_cast<std::chrono::nanoseconds>(
-      std::chrono::high_resolution_clock::now().time_since_epoch());
-  return static_cast<double>(nanos.count()) / 1.e9;
+   auto nanos = static_cast<std::chrono::nanoseconds>(
+         std::chrono::high_resolution_clock::now().time_since_epoch());
+   return static_cast<double>(nanos.count()) / 1.e9;
 }
 
 int main() {
-  double time1 = timesec(); // End time (sec)
+   auto time1 = timesec();// End time (sec)
 
-//      day1();
-//      day2();
-      day3();
-  //    day4();
-  //    day5();
-  //    day6();
-  //    day7();
-  //    day8();
-  //    day9();
-  //    day10();
-  //    day11();
-  //    day12();
-  //    day13();
-  //    day14();
-  //    day15();
-  //  day16();
-  //  day17();
-  //  day18();
-  //  day19();
-  //  day20();
-  //  day21();
-  //  day22();
-  //  day23();
-  //  day24();
-  //  day25();
-  double time2 = timesec();           // End time (sec)
-  double elapsedtime = time2 - time1; // Elapsed (sec)
-  std::cout << "Time required: " << elapsedtime << " seconds" << std::endl;
+   //      day1();
+   //      day2();
+   //      day3();
+   day4();
+   //    day5();
+   //    day6();
+   //    day7();
+   //    day8();
+   //    day9();
+   //    day10();
+   //    day11();
+   //    day12();
+   //    day13();
+   //    day14();
+   //    day15();
+   //  day16();
+   //  day17();
+   //  day18();
+   //  day19();
+   //  day20();
+   //  day21();
+   //  day22();
+   //  day23();
+   //  day24();
+   //  day25();
+   auto time2 = timesec();          // End time (sec)
+   auto elapsedtime = time2 - time1;// Elapsed (sec)
+   std::cout << "Time required: " << elapsedtime << " seconds" << std::endl;
 }
+
 //Day 1 star 1 = 910539
 //Day 1 star 2 = 116724144
 //Day 2 star 1 = 398
 //Day 2 star 2 = 562
+//Day 3 star 1 = 181
+//Day 3 star 2 = 1260601650
+//Day 4 star 1 = 226
+//Day 4 star 2 = 160
