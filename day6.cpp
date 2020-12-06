@@ -1,17 +1,12 @@
 #include <algorithm>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
 #include <iterator>
 #include <set>
-using std::back_inserter;
 using std::cout;
 using std::ifstream;
-using std::istream;
 using std::set;
-using std::set_intersection;
 using std::string;
-
 
 void day6() {
    auto star1 = 0;
