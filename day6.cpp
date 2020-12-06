@@ -38,22 +38,36 @@ using std::tuple;
 using std::swap;
 using std::vector;
 
-void daynnn() {
+void day6() {
    auto star1 = 0;
    auto star2 = 0;
-   ifstream ifile("../daynnn.txt");
+   ifstream ifile("../day6.txt");
    string line;
+   set<char> ans;
+   bool first=true;
    while (getline(ifile, line)) {
-      string s;
-      int i;
-      int x;
-      int y;
-      char c;
-      double d;
-      istringstream iline(line);
-      iline >> s;
+      if(line == "") {
+         star2 += ans.size();
+         ans.clear();
+         first = true;
+      }
+      else {
+         set<char> curPerson;
+         for (auto c : line)
+            curPerson.insert(c);
+         if (first) {
+            ans = curPerson;
+            first = false;
+         }
+         else {
+            vector<char> newAns;
+            std::set_intersection(ans.begin(),ans.end(),curPerson.begin(),curPerson.end(),std::back_inserter(newAns));
+            ans.clear();
+            ans.insert(newAns.begin(),newAns.end());
+         }
+      }
    }
 
-   cout << "Day nnn star 1 = " << star1 << "\n";
-   cout << "Day nnn star 2 = " << star2 << "\n";
+   cout << "Day 6 star 1 = " << star1 << "\n";
+   cout << "Day 6 star 2 = " << star2 << "\n";
 }

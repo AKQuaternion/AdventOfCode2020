@@ -12,7 +12,7 @@ using std::string;
 using std::vector;
 
 void day5() {
-   ifstream ifile("../input.txt");
+   ifstream ifile("../day5.txt");
    string line;
    vector<int> ids;
    while (getline(ifile, line)) {
