@@ -22,7 +22,7 @@ using std::unordered_map;
 using std::vector;
 
 template <typename T, typename R>
-using Map = map<T,R>;
+using Map = unordered_map<T,R>;
 
 class containsCounter {
 private:
@@ -62,7 +62,7 @@ private:
       return sum;
    }
 public:
-   explicit BagCounter(const map<string, vector<pair<string, int>>> &m):edges(m) {}
+   explicit BagCounter(const Map<string, vector<pair<string, int>>> &m):edges(m) {}
    [[nodiscard]] int result() {
       return bagContains("shinygold")-1;
    }
