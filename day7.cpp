@@ -1,77 +1,98 @@
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
 #include <map>
-#include <memory>
-#include <numeric>
-#include <queue>
 #include <set>
 #include <sstream>
 #include <string>
-#include <tuple>
+#include <unordered_map>
 #include <utility>
 #include <vector>
-using std::abs;
-using std::ceil;
 using std::cout;
 using std::endl;
-using std::forward_as_tuple;
 using std::ifstream;
 using std::istream;
 using std::istringstream;
 using std::map;
-using std::max;
-using std::max_element;
-using std::min;
 using std::pair;
-using std::queue;
 using std::set;
-using std::sqrt;
 using std::string;
-using std::swap;
-using std::tie;
-using std::tuple;
+using std::unordered_map;
 using std::vector;
 
-set<string> visited;
-void dfs(const map<string, vector<string>> m, string v) {
-   visited.insert(v);
-   if (m.count(v))
-      for (const string &s : m.at(v))
-         if (visited.count(s) == 0)
-            dfs(m, s);
-}
+template <typename T, typename R>
+using Map = map<T,R>;
+
+class containsCounter {
+private:
+   set<string> visited;
+   const Map<string,vector<string>> &edges;
+
+   void dfs(const string &v) {
+      visited.insert(v);
+      if (edges.count(v))
+         for (const string &s : edges.at(v))
+            if (visited.count(s) == 0)
+               dfs(s);
+   }
+public:
+   explicit containsCounter(const Map<string,vector<string>> &edges):edges(edges) {}
+   [[nodiscard]] int result() {
+      dfs("shinygold");
+      return visited.size();
+   }
+};
+
+
+class BagCounter {
+private:
+   Map<string, int> contains; //memoize results
+   const Map<string, vector<pair<string, int>>> &edges;
+
+   int bagContains(string v) {
+      if (contains.count(v) == 1)
+         return contains.at(v);
+      int sum = 1;
+      if (edges.count(v) != 0) {
+         for (const auto &[neighbor, count] : edges.at(v))
+            sum += count * bagContains(neighbor);
+      }
+      contains[v] = sum;
+      return sum;
+   }
+public:
+   explicit BagCounter(const map<string, vector<pair<string, int>>> &m):edges(m) {}
+   [[nodiscard]] int result() {
+      return bagContains("shinygold")-1;
+   }
+};
 
 void day7() {
-   auto star1 = 0;
-   auto star2 = 0;
-   map<string, vector<string>> edges;
+   Map<string, vector<pair<string, int>>> containsEdges;
+   Map<string,vector<string>> isContainedInEdges;
    ifstream ifile("../day7.txt");
    string line;
    while (getline(ifile, line)) {
-      string sa, sc, _s;
-      int i;
+      string sa;
+      string sc;
+      string _s;
       istringstream iline(line);
       iline >> sa >> sc >> _s >> _s;
-      string x = sa + sc;
-      cout << x << " -> ";
+      string left = sa + sc;
       while (iline) {
-         iline >> i;
-         if (!iline)
-            break;
-         iline >> sa >> sc >> _s;
-         string y = sa + sc;
-         cout << y << " ";
-         edges[y].push_back(x);
+         int i;
+         iline >> i >> sa >> sc >> _s;
+         if (iline) {
+            containsEdges[left].push_back({sa + sc, i});
+            isContainedInEdges[sa+sc].push_back(left);
+         }
+         else if (!iline.eof())
+            containsEdges[left] = {};
       }
-      cout << endl;
    }
-   dfs(edges, "shinygold");
-   star1 = visited.size();
+   auto star2 = BagCounter(containsEdges).result();
+   auto star1 = containsCounter(isContainedInEdges).result();
    cout << "Day 7 star 1 = " << star1 << "\n";
    cout << "Day 7 star 2 = " << star2 << "\n";
 }
