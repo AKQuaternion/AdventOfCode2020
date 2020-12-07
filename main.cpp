@@ -68,8 +68,8 @@ int main() {
    //      day3();
 //   day4();
 //       day5();
-       day6();
-   //    day7();
+//       day6();
+       day7();
    //    day8();
    //    day9();
    //    day10();
@@ -103,3 +103,6 @@ int main() {
 //Day 4 star 2 = 160
 //Day 5 star 1 = 955
 //Day 5 star 2 = 569
+//Day 6 star 1 = 6147
+//Day 6 star 2 = 2934
+//
