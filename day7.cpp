@@ -24,7 +24,7 @@ using std::vector;
 template <typename T, typename R>
 using Map = unordered_map<T,R>;
 
-class containsCounter {
+class ContainsCounter {
 private:
    set<string> visited;
    const Map<string,vector<string>> &edges;
@@ -37,13 +37,12 @@ private:
                dfs(s);
    }
 public:
-   explicit containsCounter(const Map<string,vector<string>> &edges):edges(edges) {}
+   explicit ContainsCounter(const Map<string,vector<string>> &edges):edges(edges) {}
    [[nodiscard]] int result() {
       dfs("shinygold");
       return visited.size();
    }
 };
-
 
 class BagCounter {
 private:
@@ -91,8 +90,8 @@ void day7() {
             containsEdges[left] = {};
       }
    }
+   auto star1 = ContainsCounter(isContainedInEdges).result();
    auto star2 = BagCounter(containsEdges).result();
-   auto star1 = containsCounter(isContainedInEdges).result();
    cout << "Day 7 star 1 = " << star1 << "\n";
    cout << "Day 7 star 2 = " << star2 << "\n";
 }
