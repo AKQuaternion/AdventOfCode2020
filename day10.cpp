@@ -1,83 +1,40 @@
-#include <algorithm>
-#include <cmath>
+#include <array>
 #include <cstdlib>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
-#include <iterator>
-#include <map>
-#include <memory>
-#include <numeric>
-#include <queue>
-#include <set>
-#include <sstream>
-#include <string>
-#include <tuple>
-#include <utility>
 #include <vector>
-using std::abs;
-using std::ceil;
-using std::ceil;
 using std::cout;
-using std::endl;
 using std::ifstream;
-using std::istream;
-using std::istringstream;
-using std::map;
-using std::max;
-using std::max_element;
-using std::min;
-using std::pair;
-using std::set;
-using std::queue;
-using std::sqrt;
 using std::string;
-using std::forward_as_tuple;
-using std::tie;
-using std::tuple;
-using std::swap;
 using std::vector;
 
 void day10() {
-   auto star1 = 0;
-//   auto star2 = 0;
    ifstream ifile("../day10.txt");
-   string line;
-   vector<int> ads(1);
-   int i;
-   while (ifile >> i) {
-      ads.push_back(i);
-   }
+   vector<int> adapters({0});//start with 0 jolts
+   int num;
+   while (ifile >> num)
+      adapters.push_back(num);
 
-//   star2 =ads.back();
-   sort(ads.begin(),ads.end());
-   int d1=0,d3=0;
-   for(int i=0;i<ads.size()-1;++i) {
-      if(ads[i+1]-ads[i] == 3)
-         ++d3;
-      if(ads[i+1]-ads[i] == 1)
-         ++d1;
-   }
-   star1 = d1*(d3+1);
+   sort(adapters.begin(), adapters.end());
 
-   vector<std::uint64_t > ways(ads.size());
-   ways[0]=1;
-   for(int ii=1;ii<ways.size();++ii) {
-      if(ads[ii]-ads[ii-1]<=3)
-         ways[ii] += ways[ii-1];
-      if(ii>=2 && ads[ii]-ads[ii-2]<=3)
-         ways[ii] += ways[ii-2];
-      if(ii>=3 && ads[ii]-ads[ii-3]<=3)
-         ways[ii] += ways[ii-3];
-   }
-//   for(auto w:ads)
-//      cout << w << " ";
-//   cout << endl;
-//   for(auto w:ways)
-//      cout << w << " ";
-//   cout << endl;
-   auto star2 = ways.back();
+   std::array<int, 4> diffs{};
+   for (int i = 0; i < adapters.size() - 1; ++i)
+      ++diffs[adapters[i + 1] - adapters[i]];
+   ++diffs[3];
+   auto star1 = diffs[1] * diffs[3];
+
+   vector<std::uint64_t> numWays(adapters.size());
+   numWays[0] = 1;
+   numWays[1] = 1;
+   numWays[2] = adapters[2] <= 3 ? 2 : 1;
+   for (int ii = 3; ii < numWays.size(); ++ii)
+      for (int jj = 1; jj <= 3; ++jj)
+         if (adapters[ii] - adapters[ii - jj] <= 3)
+            numWays[ii] += numWays[ii - jj];
+
+   auto star2 = numWays.back();
    cout << "Day 10 star 1 = " << star1 << "\n";
    cout << "Day 10 star 2 = " << star2 << "\n";
-
 }
+//Day 10 star 1 = 2232
+//Day 10 star 2 = 173625106649344
