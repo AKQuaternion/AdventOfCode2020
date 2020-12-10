@@ -63,15 +63,15 @@ double timesec() {
 int main() {
    auto time1 = timesec();// End time (sec)
 
-//         day1();
-//         day2();
-//         day3();
+//   day1();
+//   day2();
+//   day3();
 //   day4();
-//       day5();
-//       day6();
-       day7();
-   //    day8();
-   //    day9();
+//   day5();
+//   day6();
+//   day7();
+   day8();
+//       day9();
    //    day10();
    //    day11();
    //    day12();
@@ -105,4 +105,9 @@ int main() {
 //Day 5 star 2 = 569
 //Day 6 star 1 = 6147
 //Day 6 star 2 = 2934
-//
+//Day 7 star 1 = 198
+//Day 7 star 2 = 85324
+//Day 8 star 1 = 1594
+//Day 8 star 2 = 758
+//Day 9 star 1 = 375054920
+//Day 9 star 2 = 54142584
