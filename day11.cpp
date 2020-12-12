@@ -53,6 +53,18 @@ int ct(int i, int j) {
    return 0;
 }
 
+int ct2(int i, int j, int di, int dj) {
+   int x=i+di;
+   int y=j+dj;
+   while (x>=0&&x<seats[0].size()&&y>=0&&y<seats.size()&&seats[y][x]=='.') {
+      x += di;
+      y += dj;
+   }
+   if (x>=0&&x<seats[0].size()&&y>=0&&y<seats.size())
+      return seats[y][x]=='#'?1:0;
+   return 0;
+}
+
 void day11() {
    auto star1 = 0;
    auto star2 = 0;
@@ -67,20 +79,17 @@ void day11() {
       for (int j = 0; j < seats.size(); ++j)
          for (int i = 0; i < seats[0].size(); ++i) {
             int sum = 0;
-            sum += ct(i - 1, j - 1);
-            sum += ct(i, j - 1);
-            sum += ct(i + 1, j - 1);
-            sum += ct(i - 1, j);
-            //         sum += count(i,j);
-            sum += ct(i + 1, j);
-            sum += ct(i - 1, j + 1);
-            sum += ct(i, j + 1);
-            sum += ct(i + 1, j + 1);
-            if (i==0&&j==1)
-               cout << sum << endl;
+            sum += ct2(i,j,-1,-1);
+            sum += ct2(i,j,-1,0);
+            sum += ct2(i,j,-1,1);
+            sum += ct2(i,j,1,-1);
+            sum += ct2(i,j,1,0);
+            sum += ct2(i,j,1,1);
+            sum += ct2(i,j,0,-1);
+            sum += ct2(i,j,0,1);
             if (seats2[j][i] == 'L' && sum == 0)
                seats2[j][i] = '#';
-            if (seats2[j][i] == '#' && sum >= 4)
+            if (seats2[j][i] == '#' && sum >= 5)
                seats2[j][i] = 'L';
          }
 

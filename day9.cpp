@@ -46,7 +46,6 @@ void day9() {
 
    auto [n1, n2] = std::minmax_element(l, r);
    auto star2 = *n1 + *n2;
-   std::cout << r-l << std::endl;
 
    std::cout << "Day 9 star 1 = " << star1 << "\n"
              << "Day 9 star 2 = " << star2 << "\n";

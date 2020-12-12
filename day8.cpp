@@ -1,55 +1,23 @@
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
-#include <iterator>
 #include <map>
-#include <memory>
-#include <numeric>
 #include <optional>
-#include <queue>
 #include <set>
 #include <sstream>
 #include <string>
-#include <tuple>
 #include <utility>
 #include <vector>
-using std::abs;
-using std::ceil;
 using std::cout;
-using std::endl;
-using std::forward_as_tuple;
 using std::ifstream;
-using std::istream;
 using std::istringstream;
-using std::map;
-using std::max;
-using std::max_element;
-using std::min;
 using std::move;
 using std::optional;
 using std::pair;
-using std::queue;
 using std::set;
-using std::sqrt;
 using std::string;
-using std::swap;
-using std::tie;
-using std::tuple;
 using std::vector;
 
 namespace {
-   template<typename T>
-   T to(const string &s) {
-      istringstream iline(s);
-      T t;
-      iline >> t;
-      return t;
-   }
-
-
    class GameConsole {
       struct Instruction {
          string _op;
@@ -73,13 +41,11 @@ namespace {
 
          void executeSwapped(const Instruction &i) {
             if (i._op == "jmp")
-               ++_pc;
+               execute({"nop", i._arg});
             else if (i._op == "nop")
-               _pc += i._arg;
-            else {
-               _acc += i._arg;
-               ++_pc;
-            }
+               execute({"jmp", i._arg});
+            else
+               execute(i);
          }
       };
 
@@ -112,20 +78,22 @@ namespace {
       int unCorrupt() {
          _r = {};
          vector<bool> hits(_code.size());
-         optional<Registers> hasBacktrack;
+         optional<Registers> stateBeforeSwap;
          while (true) {
             hits[_r._pc] = true;
 
-            if (hasBacktrack) {
+            if (stateBeforeSwap) {//if we have swapped a jmp/nop
                _r.execute(_code[_r._pc]);
                if (_r._pc == _code.size())
                   return _r._acc;
                if (hits[_r._pc]) {
-                  _r = *std::exchange(hasBacktrack, {});//backtrack
+                  _r = *std::exchange(stateBeforeSwap, {});//backtrack
                   _r.execute(_code[_r._pc]);//execute original instruction
                }
             } else {
-               hasBacktrack = _r;
+               const auto &currentInstruction = _code[_r._pc]._op;
+               if (currentInstruction == "jmp" || currentInstruction == "nop")
+                  stateBeforeSwap = _r;
                _r.executeSwapped(_code[_r._pc]);
             }
          }
@@ -146,7 +114,7 @@ namespace {
          pcs.insert(pc);
       }
    }
-}
+}// namespace
 void day8() {
    GameConsole game("../day8.txt");
    auto star1 = game.runUntilLoop();
@@ -154,7 +122,6 @@ void day8() {
 
    std::cout << "Day 8 star 1 = " << star1 << "\n"
              << "Day 8 star 2 = " << star2 << "\n";
-
 }
 //Day 8 star 1 = 1594
 //Day 8 star 2 = 758
