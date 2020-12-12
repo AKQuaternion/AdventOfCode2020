@@ -114,3 +114,5 @@ int main() {
 //Day 9 star 2 = 54142584
 //Day 10 star 1 = 2232
 //Day 10 star 2 = 173625106649344
+//Day 12 star 1 = 1441
+//Day 12 star 2 = 61616
