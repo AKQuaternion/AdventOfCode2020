@@ -54,14 +54,15 @@ int ct(int i, int j) {
 }
 
 int ct2(int i, int j, int di, int dj) {
-   int x=i+di;
-   int y=j+dj;
-   while (x>=0&&x<seats[0].size()&&y>=0&&y<seats.size()&&seats[y][x]=='.') {
+   int x = i + di;
+   int y = j + dj;
+   while (x >= 0 && x < seats[0].size() && y >= 0 && y < seats.size() &&
+          seats[y][x] == '.') {
       x += di;
       y += dj;
    }
-   if (x>=0&&x<seats[0].size()&&y>=0&&y<seats.size())
-      return seats[y][x]=='#'?1:0;
+   if (x >= 0 && x < seats[0].size() && y >= 0 && y < seats.size())
+      return seats[y][x] == '#' ? 1 : 0;
    return 0;
 }
 
@@ -74,33 +75,33 @@ void day11() {
       seats.emplace_back(line);
    }
 
-   while(true) {
+   while (true) {
       vector<string> seats2(seats);
       for (int j = 0; j < seats.size(); ++j)
          for (int i = 0; i < seats[0].size(); ++i) {
             int sum = 0;
-            sum += ct2(i,j,-1,-1);
-            sum += ct2(i,j,-1,0);
-            sum += ct2(i,j,-1,1);
-            sum += ct2(i,j,1,-1);
-            sum += ct2(i,j,1,0);
-            sum += ct2(i,j,1,1);
-            sum += ct2(i,j,0,-1);
-            sum += ct2(i,j,0,1);
+            sum += ct2(i, j, -1, -1);
+            sum += ct2(i, j, -1, 0);
+            sum += ct2(i, j, -1, 1);
+            sum += ct2(i, j, 1, -1);
+            sum += ct2(i, j, 1, 0);
+            sum += ct2(i, j, 1, 1);
+            sum += ct2(i, j, 0, -1);
+            sum += ct2(i, j, 0, 1);
             if (seats2[j][i] == 'L' && sum == 0)
                seats2[j][i] = '#';
             if (seats2[j][i] == '#' && sum >= 5)
                seats2[j][i] = 'L';
          }
 
-//      cout << s << endl;
-//      cout << endl;
-      if(seats2==seats)
+      //      cout << s << endl;
+      //      cout << endl;
+      if (seats2 == seats)
          break;
       seats = seats2;
    }
-   for(auto s:seats)
-      star1 += count(s.begin(),s.end(),'#');
+   for (auto s : seats)
+      star1 += count(s.begin(), s.end(), '#');
 
    cout << "Day 11 star 1 = " << star1 << "\n";
    cout << "Day 11 star 2 = " << star2 << "\n";
