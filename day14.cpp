@@ -71,20 +71,20 @@ void day14() {
       istringstream iline(line);
       iline >> s;
       if (s == "mask") {
-         iline >> s >> s;
+         iline >> s >> s; // skip "="
          mask = string(s.rbegin(), s.rend()); //reverse so mask[i] is 2^i
       } else {
-         istringstream reader(s.substr(4));
+         istringstream reader(s.substr(4)); // skip "mem[" four characters
          long long loc;
          reader >> loc;
          long long value;
-         iline >> s >> value;
+         iline >> s >> value; // skip "="
          handleStar2Mask(mask, loc, value, 0);
          for(int i=0;i<36;++i) {
             if(mask[i]=='0')
-               value &= ~(1ll<<i);
+               value &= ~(1ll<<i); // clear bit i in value
             else if (mask[i]=='1')
-               value |= (1ll<<i);
+               value |= (1ll<<i);  // set bit i in value
          }
          star1memory[loc] = value;
       }
@@ -97,7 +97,3 @@ void day14() {
    cout << "Day 14 star 1 = " << star1 << "\n";
    cout << "Day 14 star 2 = " << star2 << "\n";
 }
-//mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
-//mem[8] = 11
-//mem[7] = 101
-//mem[8] = 0
