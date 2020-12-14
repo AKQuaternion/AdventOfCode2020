@@ -94,13 +94,12 @@ void day13() {
    sort(mods.begin(),mods.end(),std::greater<>());
    for(auto p:mods)
       cout << p.first << "," << p.second << endl;
-   long long star2 = mods.front().second;
-   long long advance = mods.front().first;
-   for(int j=1;j<mods.size();++j) {
-      while (star2 % mods[j].first != mods[j].second )
+   long long star2 = 0;
+   long long advance = 1;
+   for(auto [p,a] : mods) {
+      while (star2 % p != a )
          star2 += advance;
-      cout << star2 << endl;
-      advance *= mods[j].first;
+      advance *= p;
    }
    cout << "Day 13 star 1 = " << star1 << "\n";
    cout << "Day 13 star 2 = " << star2 << "\n";
