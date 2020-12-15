@@ -8,11 +8,12 @@ using std::ifstream;
 using std::istringstream;
 using std::map;
 using std::string;
+using BigInt = std::int64_t;
 
-map<long long, long long> star2memory;
+map<BigInt, BigInt> star2memory;
 
-void handleStar2Mask(const string &mask, long long m, long long v, int i) {
-   if (i == 36) { // base caase
+void handleStar2Mask(const string &mask, BigInt m, BigInt v, int i) {
+   if (i == 36) { // base case
       star2memory[m] = v;
       return;
    }
@@ -20,19 +21,19 @@ void handleStar2Mask(const string &mask, long long m, long long v, int i) {
       handleStar2Mask(mask, m, v, i + 1); //handle next bit
    else if (mask[i] == '1') {
       m |= (1LL << i);  //set bit i in memory location
-      handleStar2Mask(mask, m, v, i + 1);
+      handleStar2Mask(mask, m, v, i + 1);  //handle next bit
    } else {
       m |= (1LL << i);  //set bit i in memory location
-      handleStar2Mask(mask, m, v, i + 1);
+      handleStar2Mask(mask, m, v, i + 1);  //handle next bit
       m &= ~(1LL << i); //clear bit i in memory location
-      handleStar2Mask(mask, m, v, i + 1);
+      handleStar2Mask(mask, m, v, i + 1);  //handle next bit
    }
 }
 
 void day14() {
-   long long star1 = 0;
-   long long star2 = 0;
-   map<long long, long long> star1memory;
+   BigInt star1 = 0;
+   BigInt star2 = 0;
+   map<BigInt, BigInt> star1memory;
 
    ifstream ifile("../day14.txt");
    string line;
@@ -46,16 +47,16 @@ void day14() {
          mask = string(s.rbegin(), s.rend()); //reverse so mask[i] is 2^i
       } else {
          istringstream reader(s.substr(4)); // skip "mem[" four characters
-         long long loc;
+         BigInt loc;
          reader >> loc;
-         long long value;
+         BigInt value;
          iline >> s >> value; // skip "="
          handleStar2Mask(mask, loc, value, 0);
          for(int i=0;i<36;++i) {
             if(mask[i]=='0')
-               value &= ~(1ll<<i); // clear bit i in value
+               value &= ~(1LL<<i); // clear bit i in value
             else if (mask[i]=='1')
-               value |= (1ll<<i);  // set bit i in value
+               value |= (1LL<<i);  // set bit i in value
          }
          star1memory[loc] = value;
       }
