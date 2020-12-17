@@ -1,101 +1,97 @@
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
-#include <iterator>
 #include <map>
-#include <memory>
-#include <numeric>
-#include <queue>
-#include <set>
-#include <sstream>
-#include <string>
 #include <tuple>
-#include <utility>
 #include <vector>
-using std::abs;
-using std::ceil;
-using std::ceil;
+
 using std::cout;
-using std::endl;
 using std::ifstream;
-using std::istream;
 using std::istringstream;
 using std::map;
-using std::max;
-using std::max_element;
-using std::min;
-using std::pair;
-using std::set;
-using std::queue;
-using std::sqrt;
 using std::string;
-using std::forward_as_tuple;
-using std::tie;
 using std::tuple;
-using std::swap;
 using std::vector;
 
-
-int countNeighbors( map<tuple<int,int,int,int>,char> &world, int x, int y, int z, int r) {
+int countNeighbors(map<tuple<int, int, int>, char> &world, int w, int x,
+                   int y) {
    int sum = 0;
-   for(int i=-1;i<=1;++i)
-      for(int j=-1;j<=1;++j)
-         for(int k=-1;k<=1;++k)
-            for(int l=-1;l<=1;++l)
-            {
-            if (i==0&&j==0&&k==0&&l==0)
+   for (int i = -1; i <= 1; ++i)
+      for (int j = -1; j <= 1; ++j)
+         for (int k = -1; k <= 1; ++k) {
+            if (i == 0 && j == 0 && k == 0)
                continue;
-            if(world[{r+l,z+i,y+j,x+k}]=='#')
+            if (world[{w + i, x + j, y + k}] == '#')
                ++sum;
          }
    return sum;
+}
+
+int countNeighbors(map<tuple<int, int, int, int>, char> &world, int w, int x,
+                   int y, int z) {
+   int sum = 0;
+   for (int i = -1; i <= 1; ++i)
+      for (int j = -1; j <= 1; ++j)
+         for (int k = -1; k <= 1; ++k)
+            for (int l = -1; l <= 1; ++l) {
+               if (i == 0 && j == 0 && k == 0 && l == 0)
+                  continue;
+               if (world[{w + i, x + j, y + k, z + l}] == '#')
+                  ++sum;
+            }
+   return sum;
+}
+
+void applyRule(int num, char &c) {
+   if (c == '#') {
+      if (num < 2 || num > 3)
+         c = '.';
+   } else if (num == 3)
+      c = '#';
 }
 
 void day17() {
    auto star1 = 0;
    auto star2 = 0;
    ifstream ifile("../day17.txt");
-   string line;
+
    vector<string> origMap;
-   while (getline(ifile, line)) {
-      origMap.push_back(line);
+   map<tuple<int, int, int>, char> world3d;
+   map<tuple<int, int, int, int>, char> world4d;
+
+   int lineNum = 0;
+   string line;
+   for (; getline(ifile, line); ++lineNum) {
+      for (int x = 0; x < line.size(); ++x)
+         world3d[{0, x, lineNum}] = world4d[{0, x, lineNum, 0}] = line[x];
    }
+   int minf = 0;      //flat dimension
+   int maxf = 1;      //flat dimension
+   int mind = 0;      //dimension with data
+   int maxd = lineNum;//dimension with data
 
-   int minr = 0; int maxr = 0;
-   int minz = 0; int maxz = 0;
-   int minx = 0; int maxx = origMap[0].size();
-   int miny = 0; int maxy = origMap.size();
-
-   map<tuple<int,int,int,int>,char> world;
-   for(int i=0;i<origMap.size();++i)
-      for(int j=0;j<origMap[i].size();++j)
-         world[{0,0,i,j}] = origMap[i][j];
-
-   for(int gen=0;gen<6;++gen) {
-      auto worldOld = world;
-      --minr; --minz; --miny; --minx;
-      ++maxr; ++maxz; ++maxy; ++maxx;
-for(int r=minr;r<=maxr;++r)
-      for(int z=minz;z<=maxz;++z)
-         for(int y=miny;y<=maxy;++y)
-            for(int x=minx;x<=maxx;++x) {
-               //
-               auto num = countNeighbors(worldOld, x, y, z,r);
-               if (world[{r, z, y, x}] == '#') {
-                  if (num == 2 || num == 3) {
-                     ;
-                  } else
-                     world[{r, z, y, x}] = '.';
-               } else if (num == 3)
-                  world[{r, z, y, x}] = '#';
+   for (int gen = 0; gen < 6; ++gen) {
+      auto oldWorld3d = world3d;
+      auto oldWorld4d = world4d;
+      --minf;
+      --mind;
+      ++maxf;
+      ++maxd;
+      for (int w = minf; w < maxf; ++w)
+         for (int x = mind; x < maxd; ++x)
+            for (int y = mind; y < maxd; ++y) {
+               applyRule(countNeighbors(oldWorld3d, w, x, y),
+                         world3d[{w, x, y}]);
+               for (int z = minf; z < maxf; ++z)
+                  applyRule(countNeighbors(oldWorld4d, w, x, y, z),
+                            world4d[{w, x, y, z}]);
             }
    }
-   for(auto &[loc,t] : world)
-      if(t=='#')
+   for (auto &[loc, c] : world3d)
+      if (c == '#')
          ++star1;
+   for (auto &[loc, c] : world4d)
+      if (c == '#')
+         ++star2;
 
    cout << "Day 17 star 1 = " << star1 << "\n";
    cout << "Day 17 star 2 = " << star2 << "\n";
