@@ -1,165 +1,101 @@
 #include <algorithm>
-#include <cmath>
-#include <cstdlib>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
-#include <iterator>
 #include <map>
-#include <memory>
-#include <numeric>
-#include <queue>
-#include <set>
 #include <sstream>
 #include <string>
-#include <tuple>
-#include <utility>
 #include <vector>
-using std::abs;
-using std::ceil;
-using std::ceil;
+using std::all_of;
 using std::cout;
-using std::endl;
 using std::ifstream;
-using std::istream;
 using std::istringstream;
 using std::map;
-using std::max;
-using std::max_element;
-using std::min;
-using std::pair;
-using std::set;
-using std::queue;
-using std::sqrt;
 using std::string;
-using std::forward_as_tuple;
-using std::tie;
-using std::tuple;
-using std::swap;
 using std::vector;
-#include <deque>
-using std::deque;
 
 void day16() {
+   char _c;//for reading commas
    auto star1 = 0;
-   auto star2 = 0;
    ifstream ifile("../day16.txt");
    string line;
    map<string, vector<bool>> fields;
    while (getline(ifile, line)) {
-      if(line.empty())
+      if (line.empty())
          break;
       string s;
       string name;
-      int i;
-      int j;
-      int x;
-      int y;
-      char c;
-      double d;
       istringstream iline(line);
-      while(true) {
-         iline >> s;
-         name += s;
-         if (s.back() == ':') {
-            s.pop_back();
-            break;
-         }
-      }
+      getline(iline, name, ':');
       fields[name] = vector<bool>(1000);
-      cout << name << " ";
-      //class: 1-3 or 5-7
-      int b,e;
-      iline >> b >> c >> e >> s;
-      cout << b << "-" << e << " ";
-      for(int i=b;i<=e;++i)
-         fields[name][i]=true;
-      iline >> b >> c >> e;
-      cout << b << "-" << e << " ";
-      for(int i=b;i<=e;++i)
-         fields[name][i]=true;
-      cout << endl;
-
+      int b, e;
+      iline >> b >> _c >> e >> s;
+      for (int i = b; i <= e; ++i)
+         fields[name][i] = true;
+      iline >> b >> _c >> e;
+      for (int i = b; i <= e; ++i)
+         fields[name][i] = true;
    }
-   getline(ifile,line); //read "your ticket:"
-   getline(ifile,line); //read "your ticket:"
+   getline(ifile, line);//read "your ticket:"
+   getline(ifile, line);//read ticket numbers
    istringstream tline(line);
    int t;
    vector<int> tnums;
-   while (tline >> t)
-   {
-      char _c;
+   while (tline >> t) {
       tnums.push_back(t);
       tline >> _c;
    }
-   cout << "Ticket has " << tnums.size() << endl;
-   getline(ifile,line); //read "your ticket:"
+   getline(ifile, line);//read blank line
 
-   map<string,deque<bool>> nameToFnum;
-   for(auto &[name,valid] : fields)
-      nameToFnum[name] = deque<bool>(fields.size(),true);
+   map<string, vector<bool>> nameToFnum;
+   for (auto &[name, valid] : fields)
+      nameToFnum[name] = vector<bool>(fields.size(), true);
 
-   while (getline(ifile, line)) {
-//      cout << "tickt " << line << endl;
-      if(line.empty())
-         break;
-      string s;
-      int i;
-      int x;
-      int y;
-      char c;
-      double d;
+   vector<string> goodLines;
+   while (getline(ifile, line) && !line.empty()) {
       istringstream iline(line);
-      int fnum = 0;
+      bool goodLine = true;
+      int i;
       while (iline >> i) {
-         bool okay = false;
-//         cout << "checking " << i << endl;
-         for(const auto &[name,valid] : fields) {
-            if (valid[i])
-               okay = true;
-            else {
-               nameToFnum[name][fnum] = false;
-               if (name == "departurelocation:")
-               cout << line << endl << i << " (pos) " << fnum << " can't fit field " << name << endl;
-            }
-         }
-         if (!okay)
+         if (all_of(fields.begin(), fields.end(),
+                         [i](const auto &valid) { return !valid.second[i]; })) {
             star1 += i;
-         iline >> c;
-         ++fnum;
+            goodLine = false;
+         }
+         iline >> _c;
+      }
+      if (goodLine) {
+         iline.str(line);
+         iline.clear();
+         for (int fnum = 0; iline >> i; ++fnum) {
+            for (const auto &[name, valid] : fields)
+               if (!valid[i])
+                  nameToFnum[name][fnum] = false;
+            iline >> _c;
+         }
       }
    }
 
-   for(auto &[name,poss] : nameToFnum) {
-      cout << name << " can be fields ";
-      for (int i = 0; i < poss.size(); ++i) {
-         if (poss[i])
-            cout << i << " ";
+   map<string, int> fieldNums;
+   while (fieldNums.size() < tnums.size()) {
+      for (auto &[name, poss] : nameToFnum) {
+         auto num = std::count(poss.begin(), poss.end(), true);
+         if (num == 1) {
+            fieldNums[name] =
+                  find(poss.begin(), poss.end(), true) - poss.begin();
+            for (auto &[n2, p2] : nameToFnum)
+               p2[fieldNums[name]] = false;
+            break;
+         }
       }
-      cout << endl;
    }
 
-//   while (getline(ifile, line)) {
-//      string s;
-//      int i;
-//      int x;
-//      int y;
-//      char c;
-//      double d;
-//      istringstream iline(line);
-//   }
+   auto star2 = 1LL;
+   for (auto &[n, i] : fieldNums)
+      if (n.substr(0, 9) == "departure")
+         star2 *= tnums[i];
 
    cout << "Day 16 star 1 = " << star1 << "\n";
    cout << "Day 16 star 2 = " << star2 << "\n";
 }
-//class: 0-1 or 4-19
-//row: 0-5 or 8-19
-//seat: 0-13 or 16-19
-//
-//your ticket:
-//11,12,13
-//
-//nearby tickets:
-//3,9,18
-//15,1,5
-//5,14,9
+//Day 16 star 1 = 27802
+//Day 16 star 2 = 279139880759
