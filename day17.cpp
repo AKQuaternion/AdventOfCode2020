@@ -39,14 +39,16 @@ using std::swap;
 using std::vector;
 
 
-int countNeighbors( map<tuple<int,int,int>,char> &world, int x, int y, int z) {
+int countNeighbors( map<tuple<int,int,int,int>,char> &world, int x, int y, int z, int r) {
    int sum = 0;
    for(int i=-1;i<=1;++i)
       for(int j=-1;j<=1;++j)
-         for(int k=-1;k<=1;++k) {
-            if (i==0&&j==0&&k==0)
+         for(int k=-1;k<=1;++k)
+            for(int l=-1;l<=1;++l)
+            {
+            if (i==0&&j==0&&k==0&&l==0)
                continue;
-            if(world[{z+i,y+j,x+k}]=='#')
+            if(world[{r+l,z+i,y+j,x+k}]=='#')
                ++sum;
          }
    return sum;
@@ -55,7 +57,6 @@ int countNeighbors( map<tuple<int,int,int>,char> &world, int x, int y, int z) {
 void day17() {
    auto star1 = 0;
    auto star2 = 0;
-//   ifstream ifile("../day17.txt");
    ifstream ifile("../day17.txt");
    string line;
    vector<string> origMap;
@@ -64,31 +65,32 @@ void day17() {
    }
 
    int minr = 0; int maxr = 0;
-   int minz = 0; int maxz =0;
+   int minz = 0; int maxz = 0;
    int minx = 0; int maxx = origMap[0].size();
    int miny = 0; int maxy = origMap.size();
 
-   map<tuple<int,int,int>,char> world;
+   map<tuple<int,int,int,int>,char> world;
    for(int i=0;i<origMap.size();++i)
       for(int j=0;j<origMap[i].size();++j)
-         world[{0,i,j}] = origMap[i][j];
+         world[{0,0,i,j}] = origMap[i][j];
 
    for(int gen=0;gen<6;++gen) {
       auto worldOld = world;
-      --minz; --miny; --minx; --minr;
-      ++maxz; ++maxy; ++maxx; ++
+      --minr; --minz; --miny; --minx;
+      ++maxr; ++maxz; ++maxy; ++maxx;
+for(int r=minr;r<=maxr;++r)
       for(int z=minz;z<=maxz;++z)
          for(int y=miny;y<=maxy;++y)
             for(int x=minx;x<=maxx;++x) {
                //
-               auto num = countNeighbors(worldOld, x, y, z);
-               if (world[{z, y, x}] == '#') {
+               auto num = countNeighbors(worldOld, x, y, z,r);
+               if (world[{r, z, y, x}] == '#') {
                   if (num == 2 || num == 3) {
                      ;
                   } else
-                     world[{z, y, x}] = '.';
+                     world[{r, z, y, x}] = '.';
                } else if (num == 3)
-                  world[{z, y, x}] = '#';
+                  world[{r, z, y, x}] = '#';
             }
    }
    for(auto &[loc,t] : world)
@@ -98,5 +100,3 @@ void day17() {
    cout << "Day 17 star 1 = " << star1 << "\n";
    cout << "Day 17 star 2 = " << star2 << "\n";
 }
-//If a cube is active and exactly 2 or 3 of its neighbors are also active, the cube remains active. Otherwise, the cube becomes inactive.
-/// a cube is inactive but exactly 3 of its neighbors are active, the cube becomes active. Otherwise, the cube remains inactive.
