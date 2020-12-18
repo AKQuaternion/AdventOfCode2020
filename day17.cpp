@@ -1,19 +1,56 @@
+#include <algorithm>
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <set>
 #include <tuple>
 #include <vector>
 
+using std::all_of;
+using std::array;
 using std::cout;
 using std::ifstream;
 using std::istringstream;
 using std::map;
+using std::set;
 using std::string;
 using std::tuple;
 using std::vector;
+//
+//template<int N>
+//bool nextNeighborDelta(array<int, N> &a) {
+//auto i=0U;
+//while(i<N) {
+//   ++a[i];
+//   if(a[i]>1) {
+//      a[i]=-1;
+//      --i;
+//   }
+//   else {
+//      if(all_of(a.begin(),a.end(),[](auto n){return n==0;}))
+//         continue;
+//      break;
+//   }
+//   return i<N;
+//}
+//
+//template<int N>
+//int countNeighbors(map<array<int, N>, char> &world,
+//                   const array<int, N> &t) {
+//   int sum = 0;
+//   for (int i = -1; i <= 1; ++i)
+//      for (int j = -1; j <= 1; ++j)
+//         for (int k = -1; k <= 1; ++k) {
+//            if (i == 0 && j == 0 && k == 0)
+//               continue;
+//            if (world[{t[0] + i, t[1] + j, t[2] + k}] == '#')
+//               ++sum;
+//         }
+//   return sum;
+//}
 
-int countNeighbors(map<tuple<int, int, int>, char> &world, int w, int x,
-                   int y) {
+int countNeighbors(map<array<int, 3>, char> &world, int w, int x, int y) {
    int sum = 0;
    for (int i = -1; i <= 1; ++i)
       for (int j = -1; j <= 1; ++j)
@@ -26,8 +63,8 @@ int countNeighbors(map<tuple<int, int, int>, char> &world, int w, int x,
    return sum;
 }
 
-int countNeighbors(map<tuple<int, int, int, int>, char> &world, int w, int x,
-                   int y, int z) {
+int countNeighbors(map<array<int, 4>, char> &world, int w, int x, int y,
+                   int z) {
    int sum = 0;
    for (int i = -1; i <= 1; ++i)
       for (int j = -1; j <= 1; ++j)
@@ -55,8 +92,8 @@ void day17() {
    ifstream ifile("../day17.txt");
 
    vector<string> origMap;
-   map<tuple<int, int, int>, char> world3d;
-   map<tuple<int, int, int, int>, char> world4d;
+   map<array<int, 3>, char> world3d;
+   map<array<int, 4>, char> world4d;
 
    int lineNum = 0;
    string line;
@@ -79,7 +116,7 @@ void day17() {
       for (int w = minf; w < maxf; ++w)
          for (int x = mind; x < maxd; ++x)
             for (int y = mind; y < maxd; ++y) {
-               applyRule(countNeighbors(oldWorld3d, w, x, y),
+               applyRule(countNeighbors(oldWorld3d,w, x, y),
                          world3d[{w, x, y}]);
                for (int z = minf; z < maxf; ++z)
                   applyRule(countNeighbors(oldWorld4d, w, x, y, z),
